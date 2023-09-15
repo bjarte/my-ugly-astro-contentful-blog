@@ -1,5 +1,5 @@
 ---
-title: 'My First Blog Post'
+title: 'My Third Blog Post'
 pubDate: 2022-07-01
 description: 'This is the first post of my new Astro blog.'
 author: 'Astro Learner'
@@ -9,7 +9,7 @@ image:
 tags: ["astro", "blogging", "learning in public"]
 ---
 
-# My First Blog Post
+# My Third Blog Post
 
 ## Introduction
 
