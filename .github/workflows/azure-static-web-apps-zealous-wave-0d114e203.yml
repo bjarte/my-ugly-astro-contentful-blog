@@ -30,6 +30,10 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "/dist" # Built app content directory - optional
+        env:
+          contentful_space_id: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          contentful_access_token: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
+          contentful_preview_access_token: ${{ secrets.CONTENTFUL_PREVIEW_ACCESS_TOKEN }}
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
