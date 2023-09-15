@@ -1,17 +1,50 @@
 ---
+import { contentfulClient } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import type { EntryFieldTypes } from "contentful";
+
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 const allPosts = await Astro.glob("../pages/posts/*.md");
-const title = "My Astro Learning Blog";
+const title = "Bjarte's Blog Posts";
+
+interface BlogPost {
+  contentTypeId: "blogpost";
+  fields: {
+    title: EntryFieldTypes.Text;
+    slug: EntryFieldTypes.Text;
+    intro: EntryFieldTypes.Text;
+    body: EntryFieldTypes.RichText;
+  };
+}
+
+const entries = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogpost"
+});
+
+// How to read body field from Contentful
+// <p set:html={documentToHtmlString(item.fields.body)} />
+
 ---
 
 <Layout title={title}>
   <main>
     <h1>{title}</h1>
-    <p>This is where I will post about my journey learning Astro.</p>
+
+    <h2>Some blog posts written in markdown files</h2>
     {
       allPosts.map((post) => (
         <Card title={post.frontmatter.title} url={post.url} />
+      ))
+    }
+
+    <h2>Blog posts fetched from Contentful</h2>
+    {
+      entries.items.map((item) => (
+        <section>
+          <h3>{item.fields.title}</h3>
+          <p>{item.fields.intro}</p>
+        </section>
       ))
     }
   </main>
