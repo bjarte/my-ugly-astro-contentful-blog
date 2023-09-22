@@ -1,0 +1,44 @@
+---
+import { contentfulClient } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import type { EntryFieldTypes } from "contentful";
+
+import Layout from "../layouts/Layout.astro";
+const title = "Bjarte's Blog Posts";
+
+interface BlogPost {
+  contentTypeId: "blogpost";
+  fields: {
+    title: EntryFieldTypes.Text;
+    content: EntryFieldTypes.RichText;
+    excerpt: EntryFieldTypes.Text;
+    coverImage: EntryFieldTypes.AssetLink;
+    altText: EntryFieldTypes.Text;
+  };
+}
+
+const entries = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogpost",
+});
+
+// How to read body field from Contentful
+// <p set:html={documentToHtmlString(item.fields.body)} />
+---
+
+<Layout title={title}>
+  <main>
+    <h1>{title}</h1>
+
+    <h2>Blog posts fetched from Contentful</h2>
+    {
+      entries.items.map((item) => (
+        <section>
+          <h3>{item.fields.title}</h3>
+          <p>{item.fields.excerpt}</p>
+          <p><img src={item.fields.coverImage.fields.file.url} alt={item.fields.altText} /></p>
+          <p>{item.fields.</p>
+        </section>
+      ))
+    }
+  </main>
+</Layout>
