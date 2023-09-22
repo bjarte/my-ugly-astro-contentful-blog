@@ -1,10 +1,15 @@
 ---
 import { contentfulClient } from "../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import type { EntryFieldTypes } from "contentful";
 
 import Layout from "../layouts/Layout.astro";
+import type { EntryFieldTypes } from "contentful";
 const title = "Bjarte's Blog Posts";
+
+const entries = await contentfulClient.getEntries<Blogpost>({
+  content_type: "blogpost",
+  limit: 3,
+});
 
 interface Blogpost {
   contentTypeId: "blogpost";
@@ -12,7 +17,7 @@ interface Blogpost {
     title: EntryFieldTypes.Text;
     content: EntryFieldTypes.RichText;
     excerpt: EntryFieldTypes.Text;
-    imageWithAltText: ImageWithAltText;
+    imageWithAltText: EntryFieldTypes.EntryLink<ImageWithAltText>;
   };
 }
 
@@ -26,14 +31,8 @@ interface ImageWithAltText {
   };
 }
 
-const entries = await contentfulClient.getEntries<Blogpost>({
-  content_type: "blogpost",
-  limit: 2,
-});
-
 // How to read body field from Contentful
 // <p set:html={documentToHtmlString(item.fields.body)} />
-
 ---
 
 <Layout title={title}>
@@ -46,10 +45,15 @@ const entries = await contentfulClient.getEntries<Blogpost>({
         <section>
           <h3>{item.fields.title}</h3>
           <p>{item.fields.excerpt}</p>
-          <p>{item.fields.imageWithAltText}</p>
+          <p>
+            <img
+              src={`${item.fields.imageWithAltText.fields.image.fields.file.url}?w=520`}
+            />
+          </p>
           <p set:html={documentToHtmlString(item.fields.content)} />
         </section>
       ))
     }
   </main>
 </Layout>
+ ../interfaces/ImageWithAltText../interfaces/BlogPost
