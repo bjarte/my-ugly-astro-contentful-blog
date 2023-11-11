@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^16.1.2",
-    "astro": "^3.1.0",
+    "astro": "^3.5.2",
     "contentful": "^10.5.2"
   }
 }
